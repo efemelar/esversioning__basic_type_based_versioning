@@ -29,8 +29,12 @@ class InventoryListView {
     BullShitDB.rename(e.id, e.newName)
   }
 
-  def handle(e: InventoryItemDeactivated) {
+  def handle(e: InventoryItemDeactivated_v1) {
     BullShitDB.remove(e.id)
+  }
+
+  def handle(e: InventoryItemDeactivated_v2) {
+    BullShitDB.remove(e.itemId)
   }
 }
 
@@ -56,8 +60,13 @@ class InventoryItemDetailView {
       version = e.version)
     BullShitDB.addDetails(e.id, newDetails)
   }
-  def handle(e: InventoryItemDeactivated) {
+
+  def handle(e: InventoryItemDeactivated_v1) {
     BullShitDB.removeDetails(e.id)
+  }
+
+  def handle(e: InventoryItemDeactivated_v2) {
+    BullShitDB.removeDetails(e.itemId)
   }
 }
 

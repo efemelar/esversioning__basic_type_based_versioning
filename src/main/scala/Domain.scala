@@ -25,7 +25,10 @@ class InventoryItem (
     case e: InventoryItemCreated =>
       State(id = e.id, name = e.name, activated = true, count = 0)
 
-    case _: InventoryItemDeactivated =>
+    case _: InventoryItemDeactivated_v1 =>
+      state.copy(activated = false)
+
+    case _: InventoryItemDeactivated_v2 =>
       state.copy(activated = false)
 
     case e: InventoryItemRenamed =>
@@ -53,9 +56,9 @@ class InventoryItem (
     applyChange(ItemsCheckedInToInventory(id, count))
   }
 
-  def deactivate() {
+  def deactivate(reason: String) {
     require(state.activated, "already deactivated")
-    applyChange(InventoryItemDeactivated(id))
+    applyChange(InventoryItemDeactivated_v2(id, reason))
   }
 }
 

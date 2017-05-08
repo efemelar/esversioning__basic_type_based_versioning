@@ -16,13 +16,15 @@ class Boot {
   bus.registerHandler[InventoryItemCreated](detail.handle)
   bus.registerHandler[ItemsRemovedFromInventory](detail.handle)
   bus.registerHandler[ItemsCheckedInToInventory](detail.handle)
-  bus.registerHandler[InventoryItemDeactivated](detail.handle)
+  bus.registerHandler[InventoryItemDeactivated_v1](detail.handle)
+  bus.registerHandler[InventoryItemDeactivated_v2](detail.handle)
 
 
   val list = new InventoryListView
   bus.registerHandler[InventoryItemCreated](list.handle)
   bus.registerHandler[InventoryItemRenamed](list.handle)
-  bus.registerHandler[InventoryItemDeactivated](list.handle)
+  bus.registerHandler[InventoryItemDeactivated_v1](list.handle)
+  bus.registerHandler[InventoryItemDeactivated_v2](list.handle)
 
   val readModel = new InMemReadModelFacade
 }

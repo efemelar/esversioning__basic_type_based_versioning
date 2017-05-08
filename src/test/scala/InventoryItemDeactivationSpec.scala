@@ -20,13 +20,13 @@ class InventoryItemDeactivationSpec extends FunSpec with GivenWhenThen {
       repo.save(item)
 
       When("deactivating")
-      bus.send(DeactivateInventoryItem(itemId, 0))
+      bus.send(DeactivateInventoryItem(itemId, "too mainstream", 0))
 
-      Then("it's deactivated without red tape")
+      Then("deactivation reason noted down")
       assert(
         storage.eventsForAggregate(itemId).tail ===
         Seq(
-          InventoryItemDeactivated(itemId)
+          InventoryItemDeactivated_v2(itemId, "too mainstream")
         )
       )
 

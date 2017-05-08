@@ -5,6 +5,7 @@ trait Command extends Message
 
 case class DeactivateInventoryItem(
   inventoryItemId: UUID,
+  reason: String,
   originalVersion: Int
 ) extends Command
 

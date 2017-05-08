@@ -9,7 +9,8 @@ abstract class Event extends Message {
   }
 }
 
-case class InventoryItemDeactivated(id: UUID) extends Event
+case class InventoryItemDeactivated_v1(id: UUID) extends Event
+case class InventoryItemDeactivated_v2(itemId: UUID, reason: String) extends Event
 
 case class InventoryItemCreated(id: UUID, name: String) extends Event
 

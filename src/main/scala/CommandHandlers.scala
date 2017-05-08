@@ -8,7 +8,7 @@ class InventoryCommandHandlers(repository: Repository[InventoryItem]) {
 
   def handle(cmd: DeactivateInventoryItem) {
     val item = repository.getById(cmd.inventoryItemId)
-    item.deactivate()
+    item.deactivate(cmd.reason)
     repository.save(item, cmd.originalVersion)
   }
 
