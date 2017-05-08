@@ -25,9 +25,6 @@ class InventoryItem (
     case e: InventoryItemCreated =>
       State(id = e.id, name = e.name, activated = true, count = 0)
 
-    case _: InventoryItemDeactivated_v1 =>
-      state.copy(activated = false)
-
     case _: InventoryItemDeactivated_v2 =>
       state.copy(activated = false)
 
@@ -115,9 +112,17 @@ class EventStoreRepository[T <: AggregateRoot[T] : ClassTag](
     storage.saveEvents(ar.id, ar.uncommittedChanges, expectedVersion)
   }
 
-  def getById(id: UUID) =
+  private def upcast(e: Event): Event = e match {
+    case v1: InventoryItemDeactivated_v1 => InventoryItemDeactivated_v2.from(v1)
+    case other => other
+  }
+
+  def getById(id: UUID) = {
+    val events = storage.eventsForAggregate(id, upcast)
+
     classTag[T].runtimeClass.getConstructor(classOf[UUID], classOf[Seq[Event]], classOf[Boolean])
     .newInstance(id, storage.eventsForAggregate(id), java.lang.Boolean.FALSE)
     .asInstanceOf[T]
+  }
 }
 

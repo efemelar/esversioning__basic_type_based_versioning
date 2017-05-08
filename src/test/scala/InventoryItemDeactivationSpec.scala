@@ -22,6 +22,7 @@ class InventoryItemDeactivationSpec extends FunSpec with GivenWhenThen {
       When("deactivating")
       bus.send(DeactivateInventoryItem(itemId, "too mainstream", 0))
 
+
       Then("deactivation reason noted down")
       assert(
         storage.eventsForAggregate(itemId).tail ===
@@ -30,7 +31,7 @@ class InventoryItemDeactivationSpec extends FunSpec with GivenWhenThen {
         )
       )
 
-      And("No details can be found about it afterwards")
+      And("no details can be found about it afterwards")
       assert(
         readModel.findInventoryItemDetails(itemId).isEmpty
       )

@@ -2,7 +2,7 @@ package simpleCQRS
 
 
 trait EventStore {
-  def eventsForAggregate(id: UUID): Seq[Event]
+  def eventsForAggregate(id: UUID, upcast: Event => Event = identity): Seq[Event]
   def saveEvents(id: UUID, events: Seq[Event], expectedVersion: Int)
 }
 
@@ -38,9 +38,9 @@ class InMemEventStore(publish: Event => Unit) extends EventStore {
     }
   }
 
-  def eventsForAggregate(id: UUID) = {
+  def eventsForAggregate(id: UUID, upcast: Event => Event = identity) = {
     if (!current.contains(id)) throw new AggregateNotFoundException(id)
-    current(id).map(_.eventData)
+    current(id).map(e => upcast(e.eventData))
   }
 }
 
